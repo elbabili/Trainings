@@ -34,6 +34,7 @@ public class Training {
 			System.out.println("4 : supprimer un cours du panier");
 			System.out.println("5 : sortir du programme");
 			
+			while(scan.hasNextInt() == false)	scan.next();
 			int action = scan.nextInt();
 			switch(action) {
 				case 1 : display(trainings);
@@ -44,8 +45,11 @@ public class Training {
 				
 				case 3 : System.out.println("saisissez le numéro de formation à ajouter au panier :");
 				int id = scan.nextInt();
-				//vérifier que les ID sont bien dans l'intervalle
-				if(caddy.containsKey(id))	{
+				int idMax = trainings[0].length-1; 
+				if(id < 1 || id > idMax) {
+					System.out.println("vous devez saisir une valeur comprise dans le menu !");
+				}
+				else if(caddy.containsKey(id))	{
 					String qty = caddy.get(id)[5];
 					qty = qty.replace(" ", "");
 					int quantity = Integer.valueOf(qty);
@@ -56,6 +60,17 @@ public class Training {
 					caddy.put(id, trainings[id+1]);					
 				}				
 				break;
+				
+				case 4 : System.out.println("saisissez le numéro de formation à supprimer du panier :");
+				id = scan.nextInt();
+				caddy.remove(id);
+				break;
+				
+				case 5 : System.out.println("au revoir !");
+				exit = false;
+				break;
+				
+				default : System.out.println("erreur de saisie, merci de saisir une valeur comprise dans l'interval");
 			}
 		}
 		scan.close();
@@ -63,7 +78,8 @@ public class Training {
 
 	public static void display(Map <Integer,String[]> caddy) {
 		System.out.println("****contenu du panier****");
-		for(String[] cad : caddy.values()) {
+		if(caddy.isEmpty())		System.out.println("PANIER VIDE");
+		else for(String[] cad : caddy.values()) {
 			System.out.println(cad[0] + " " + cad[1] + " " + cad[2] + " " + cad[3] + " " + cad[4] + " " + cad[5]);
 		}
 		System.out.println("*************************");
